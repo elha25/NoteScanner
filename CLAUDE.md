@@ -67,9 +67,10 @@ lista til venstre og lagrer ett eller alle dokumenter som separate PDF-er. UI-te
 - `packaging/NoteScanner.spec` (PyInstaller onedir, img2pdf som .py-fil pga. LGPL), `packaging/installer.iss`
   (Inno Setup, per bruker, `AppMutex=NoteScannerAppMutex`), `make_icon.py`, `make_version_info.py`,
   `release_notes.py` (leser avsnittet for versjonen i `CHANGELOG.md`).
-- `.github/workflows/ci.yml` – tester på Windows og Linux. `release.yml` – på tag `v*`: tester, bygger exe,
+- `.github/workflows/ci.yml` – tester på Windows og Linux. `release.yml` – på tag `v*` eller «Run workflow»: tester, bygger exe,
   kjører `--selftest` på den, lager installasjonsfil + portable zip + sjekksummer og publiserer en GitHub-versjon.
-- Ny versjon: oppdater `notescanner/__init__.py` og `CHANGELOG.md`, commit, `git tag vX.Y.Z`, push taggen.
+- Ny versjon: oppdater `notescanner/__init__.py` og `CHANGELOG.md`, push til main, og kjør «Ny versjon» under
+  Actions (`gh workflow run release.yml`) – eller push en tag `vX.Y.Z`. Jobben lager taggen selv.
 
 ## Kommandoer
 - Installer avhengigheter: `python -m pip install -r requirements.txt -r requirements-dev.txt`

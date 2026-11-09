@@ -58,7 +58,8 @@ start.bat
 
 `start.bat` installerer pakkene første gang. Tester: `pip install -r requirements-dev.txt` og `python -m pytest`.
 Bygg installasjonsfil: se `.github/workflows/release.yml` (PyInstaller + Inno Setup). En ny versjon publiseres
-ved å oppdatere `notescanner/__init__.py` og `CHANGELOG.md` og pushe en tag `vX.Y.Z`.
+ved å oppdatere `notescanner/__init__.py` og `CHANGELOG.md` på `main` og trykke *Run workflow* under
+*Actions → Ny versjon* (eller pushe en tag `vX.Y.Z`).
 
 ## Lisens
 
