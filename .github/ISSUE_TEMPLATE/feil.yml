@@ -1,0 +1,42 @@
+name: Feil / Bug
+description: Noe virker ikke som det skal
+labels: ["feil"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Takk for at du melder fra! Bruk gjerne **Flere valg → Rapporter feil** i appen – da fylles versjon og logg ut av seg selv.
+        **Ikke legg ved bilder av noter du ikke har rett til å dele** – saken er offentlig.
+  - type: textarea
+    id: hva
+    attributes:
+      label: Hva skjedde?
+      description: Hva gjorde du, og hva gikk galt?
+      placeholder: "Jeg skannet en side fra … og tittelen ble …"
+    validations:
+      required: true
+  - type: textarea
+    id: forventet
+    attributes:
+      label: Hva forventet du?
+  - type: input
+    id: versjon
+    attributes:
+      label: Versjon
+      placeholder: "2.3.0"
+  - type: input
+    id: skanner
+    attributes:
+      label: Skanner
+      placeholder: "Canon CanoScan LiDE 300 / Brother DCP-L2627DW / …"
+  - type: textarea
+    id: system
+    attributes:
+      label: System
+      render: text
+  - type: textarea
+    id: logg
+    attributes:
+      label: Logg
+      description: Fylles ut av appen. Personlige mappenavn er fjernet.
+      render: text

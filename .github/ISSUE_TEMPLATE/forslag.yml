@@ -1,0 +1,14 @@
+name: Forslag / Feature request
+description: Ide til noe NoteScanner burde kunne
+labels: ["forslag"]
+body:
+  - type: textarea
+    id: forslag
+    attributes:
+      label: Hva ønsker du deg?
+    validations:
+      required: true
+  - type: textarea
+    id: hvorfor
+    attributes:
+      label: Hvorfor / hvordan bruker du appen?

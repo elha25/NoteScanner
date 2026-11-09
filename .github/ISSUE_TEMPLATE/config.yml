@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Last ned siste versjon
+    url: https://github.com/elha25/NoteScanner/releases/latest
+    about: Installasjonsfila for Windows ligger under «Assets».

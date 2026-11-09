@@ -1,0 +1,16 @@
+__pycache__/
+*.py[cod]
+build/
+dist/
+*.spec.bak
+packaging/version_info.txt
+packaging/NoteScanner.ico
+.pytest_cache/
+.venv/
+venv/
+# loggfiler og data fra eldre versjoner (nå i %LOCALAPPDATA%\NoteScanner)
+feillogg.txt
+skannelogg.txt
+# skannede noter er opphavsrettsbeskyttet – aldri i repoet
+*.pdf
+scans/

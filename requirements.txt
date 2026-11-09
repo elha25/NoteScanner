@@ -1,0 +1,9 @@
+PySide6>=6.6
+opencv-python-headless>=4.8
+numpy>=1.24
+pillow>=10.0
+img2pdf>=0.5
+pikepdf>=8   # bokmerker i PDF-en (følger vanligvis med img2pdf)
+pywin32>=306; sys_platform == "win32"
+# Tesseract-reserve (valgfri, krever at Tesseract er installert)
+pytesseract>=0.3

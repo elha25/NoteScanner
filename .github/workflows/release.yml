@@ -1,0 +1,67 @@
+name: Ny versjon
+
+# Lag en versjon ved å pushe en tag, f.eks.:  git tag v2.3.0 && git push origin v2.3.0
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: windows-latest
+    env:
+      QT_QPA_PLATFORM: offscreen
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - name: Installer
+        run: python -m pip install -r requirements-dev.txt
+      - name: Sjekk at taggen og versjonen i koden stemmer
+        shell: pwsh
+        run: |
+          $tag = "${{ github.ref_name }}".TrimStart("v")
+          $ver = python -c "import notescanner; print(notescanner.__version__)"
+          if ($tag -ne $ver) { Write-Error "Tag $tag, men notescanner.__version__ er $ver"; exit 1 }
+          "VERSION=$ver" | Out-File -FilePath $env:GITHUB_ENV -Append
+      - name: Tester
+        run: python -m pytest -q tests
+      - name: Ikon og versjonsinfo
+        run: |
+          python packaging/make_icon.py
+          python packaging/make_version_info.py
+      - name: Bygg med PyInstaller
+        run: pyinstaller --noconfirm --distpath dist --workpath build packaging/NoteScanner.spec
+      - name: Sjekk at det bygde programmet starter
+        shell: pwsh
+        run: |
+          $p = Start-Process dist\NoteScanner\NoteScanner.exe -ArgumentList "--selftest" -PassThru -Wait
+          if ($p.ExitCode -ne 0) { Write-Error "NoteScanner.exe --selftest feilet ($($p.ExitCode))"; exit 1 }
+      - name: Lag installasjonsfil (Inno Setup)
+        shell: pwsh
+        run: |
+          if (-not (Get-Command iscc -ErrorAction SilentlyContinue)) { choco install innosetup -y --no-progress }
+          $iscc = (Get-Command iscc -ErrorAction SilentlyContinue).Source
+          if (-not $iscc) { $iscc = "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe" }
+          & $iscc "/DMyAppVersion=$env:VERSION" packaging\installer.iss
+          if ($LASTEXITCODE -ne 0) { exit 1 }
+      - name: Bærbar zip og sjekksummer
+        shell: pwsh
+        run: |
+          Compress-Archive -Path dist\NoteScanner -DestinationPath "dist\NoteScanner-$env:VERSION-portable.zip"
+          foreach ($f in Get-ChildItem dist\*.exe, dist\*.zip) {
+            $h = (Get-FileHash $f.FullName -Algorithm SHA256).Hash.ToLower()
+            "$h  $($f.Name)" | Out-File -Encoding ascii "$($f.FullName).sha256"
+          }
+      - name: Publiser på GitHub
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python packaging/release_notes.py $env:VERSION dist\notes.md
+          gh release create "${{ github.ref_name }}" dist\*.exe dist\*.zip dist\*.sha256 `
+            --title "NoteScanner $env:VERSION" --notes-file dist\notes.md
