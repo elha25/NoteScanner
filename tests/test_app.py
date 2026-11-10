@@ -121,3 +121,17 @@ def test_safe_name():
     assert safe_name("Marsj: i C?") == "Marsj_ i C_"
     assert safe_name(" . ", "Noter") == "Noter"
     assert len(safe_name("x" * 400)) <= 150
+
+
+def test_file_dpi(tmp_path):
+    import numpy as np
+    from PIL import Image
+    from notescanner.app import file_dpi
+    arr = np.full((100, 80), 255, np.uint8)
+    for name, dpi, want in [("b.jpg", (600, 600), 600), ("c.png", (300, 300), 300), ("t.tif", (600, 600), 600),
+                            ("kamera.jpg", (72, 72), None), ("ingen.png", None, None)]:
+        f = tmp_path / name
+        kw = {"dpi": dpi} if dpi else {}
+        Image.fromarray(arr).save(f, **kw)
+        assert file_dpi(str(f)) == want, name
+    assert file_dpi(str(tmp_path / "finnes-ikke.png")) is None

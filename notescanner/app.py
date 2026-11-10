@@ -210,6 +210,22 @@ def to_qimage(img: np.ndarray) -> QImage:
     return QImage(np.ascontiguousarray(rgb).data, w, h, 3 * w, QImage.Format_RGB888).copy()
 
 
+def file_dpi(path: str) -> int | None:
+    """Oppløsningen skannerprogrammet har skrevet i bildefila, eller None. 72/96 dpi er bare standardverdier fra
+    kamera og skjermbilder, så bare 150–2400 regnes som en ekte skanneoppløsning."""
+    try:
+        from PIL import Image
+        with Image.open(path) as im:
+            d = im.info.get("dpi")
+        if d:
+            x, y = float(d[0]), float(d[1])
+            if 150 <= x <= 2400 and abs(x - y) < 1:
+                return int(round(x))
+    except Exception:  # noqa: BLE001
+        pass
+    return None
+
+
 def read_image(path: str):
     data = np.fromfile(path, np.uint8)  # håndterer æøå i filstier på Windows
     img = cv2.imdecode(data, cv2.IMREAD_UNCHANGED)
@@ -2659,7 +2675,9 @@ class MainWindow(QMainWindow):
             self.import_file(fpath)
 
     def import_file(self, path: str):
-        self.proc_thread.add(self._opts(), dpi=int(self.dpi.currentData()), path=path)
+        # Oppløsningen som står i fila (Brother iPrint&Scan, IJ Scan Utility), ellers den som er valgt i appen
+        dpi = file_dpi(path) or int(self.dpi.currentData())
+        self.proc_thread.add(self._opts(), dpi=dpi, path=path)
         self._update_info()
 
     def _prime_watch_folder(self):

@@ -43,7 +43,7 @@ Brother sender Scan-knappen til sitt eget program (Brother iPrint&Scan), ikke ti
 4. I NoteScanner: *Flere valg → Overvåk mappe → Velg …* og velg samme mappe.
 5. På skanneren: **Scan → til PC → Fil** og velg PC-en.
 
-Brother iPrint&Scan må kjøre i bakgrunnen (den starter vanligvis med Windows). Hver gang du trykker, havner siden i lista i NoteScanner. Mellomromstasten i appen virker fortsatt.
+Brother iPrint&Scan må kjøre i bakgrunnen (den starter vanligvis med Windows). Hver gang du trykker, havner siden i lista i NoteScanner. NoteScanner leser oppløsningen fra bildefila, så den trenger ikke stemme med dpi-valget i appen. Mellomromstasten i appen virker fortsatt.
 
 ## Vinduet
 

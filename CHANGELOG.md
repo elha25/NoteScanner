@@ -1,5 +1,11 @@
 # Endringer
 
+## 2.3.1
+
+- Bilder fra en overvåket mappe eller *Importer* bruker oppløsningen som står i bildefila (f.eks. 600 dpi fra
+  Brother iPrint&Scan), ikke dpi-valget i appen. Før ble siden feil størrelse i PDF-en og beskjæringen dårligere
+  når de to ikke stemte.
+
 ## 2.3.0
 
 Første versjon på GitHub, med installasjonsfil.
